@@ -1,0 +1,38 @@
+name: Release
+
+# Pushing a tag like v1.2.3 runs the tests, publishes the x64 and ARM64 portable apps with that version, zips them and attaches the archives to a GitHub release.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - name: Test
+        run: dotnet test --project tests/EuroCoins.Tests
+
+      - name: Publish
+        shell: pwsh
+        run: |
+          $version = '${{ github.ref_name }}'.TrimStart('v')
+          foreach ($target in @(@{ Rid = 'win-x64'; Platform = 'x64' }, @{ Rid = 'win-arm64'; Platform = 'ARM64' })) {
+            $folder = "artifacts/EuroCoins-$version-$($target.Rid)"
+            dotnet publish src/EuroCoins -c Release -r $target.Rid -p:Platform=$($target.Platform) -p:Version=$version -o $folder
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            Compress-Archive -Path "$folder/*" -DestinationPath "$folder.zip"
+          }
+
+      - name: Create release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create '${{ github.ref_name }}' artifacts/*.zip --title 'EuroCoins ${{ github.ref_name }}' --generate-notes

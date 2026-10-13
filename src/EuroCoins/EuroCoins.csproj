@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+        <TargetPlatformMinVersion>10.0.22000.0</TargetPlatformMinVersion>
+        <SupportedOSPlatformVersion>10.0.22000.0</SupportedOSPlatformVersion>
+        <RootNamespace>EuroCoins</RootNamespace>
+        <AssemblyName>EuroCoins</AssemblyName>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <ApplicationIcon>Assets\EuroCoins.ico</ApplicationIcon>
+        <Platforms>x64;ARM64</Platforms>
+        <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+        <UseWinUI>true</UseWinUI>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnableMsixTooling>true</EnableMsixTooling>
+        <DefaultLanguage>en-US</DefaultLanguage>
+
+        <!-- Portable, unpackaged app: .NET and the Windows App SDK ship inside the app folder. -->
+        <WindowsPackageType>None</WindowsPackageType>
+        <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+        <SelfContained>true</SelfContained>
+        <PublishReadyToRun Condition="'$(Configuration)' == 'Release'">true</PublishReadyToRun>
+
+        <!-- Program.Main enforces a single instance before XAML starts. -->
+        <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+    </PropertyGroup>
+
+    <!-- Without -r the runtime identifier follows the platform: ARM64 → win-arm64, anything else → win-x64. -->
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == '' and '$(Platform)' == 'ARM64'">
+        <RuntimeIdentifier>win-arm64</RuntimeIdentifier>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == '' and '$(Platform)' != 'ARM64'">
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.WindowsAppSDK" />
+        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
+        <PackageReference Include="CommunityToolkit.Mvvm" />
+        <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" />
+        <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.Extensions.Logging" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\EuroCoins.Core\EuroCoins.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Assets\EuroCoins.png" CopyToOutputDirectory="PreserveNewest" />
+        <!-- Window icon (AppWindow.SetIcon loads it from a file); the exe embeds it as ApplicationIcon. -->
+        <Content Include="Assets\EuroCoins.ico" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="Assets\Catalog\**" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,163 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "dotnet.defaultSolution": "EuroCoins.slnx",
+    "files.encoding": "utf8",
+    "files.eol": "\r\n",
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "files.exclude": {
+      "**/bin": true,
+      "**/obj": true,
+      "artifacts": true
+    },
+    "search.exclude": {
+      "src/EuroCoins/Assets/Catalog/Images": true
+    },
+    "files.associations": {
+      "*.resw": "xml",
+      "*.slnx": "xml"
+    },
+    "[csharp]": {
+      "editor.defaultFormatter": "ms-dotnettools.csharp",
+      "editor.tabSize": 4
+    },
+    "[xml]": {
+      "editor.tabSize": 4
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-dotnettools.csdevkit",
+      "ms-dotnettools.csharp",
+      "ms-dotnettools.vscode-dotnet-runtime",
+      "editorconfig.editorconfig",
+      "github.vscode-github-actions"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Build app (x64)",
+        "type": "process",
+        "command": "dotnet",
+        "args": ["build", "${workspaceFolder}/src/EuroCoins/EuroCoins.csproj", "-p:Platform=x64"],
+        "problemMatcher": "$msCompile",
+        "group": { "kind": "build", "isDefault": true }
+      },
+      {
+        "label": "Build app (ARM64)",
+        "type": "process",
+        "command": "dotnet",
+        "args": ["build", "${workspaceFolder}/src/EuroCoins/EuroCoins.csproj", "-p:Platform=ARM64"],
+        "problemMatcher": "$msCompile",
+        "group": "build"
+      },
+      {
+        "label": "Build solution",
+        "type": "process",
+        "command": "dotnet",
+        "args": ["build", "${workspaceFolder}/EuroCoins.slnx", "-p:Platform=x64"],
+        "problemMatcher": "$msCompile",
+        "group": "build"
+      },
+      {
+        "label": "Build catalog tool",
+        "type": "process",
+        "command": "dotnet",
+        "args": ["build", "${workspaceFolder}/tools/EuroCoins.CatalogTool/EuroCoins.CatalogTool.csproj"],
+        "problemMatcher": "$msCompile",
+        "group": "build"
+      },
+      {
+        "label": "Test",
+        "type": "process",
+        "command": "dotnet",
+        "args": ["test", "--project", "${workspaceFolder}/tests/EuroCoins.Tests"],
+        "problemMatcher": "$msCompile",
+        "group": { "kind": "test", "isDefault": true }
+      },
+      {
+        "label": "Publish portable app (x64)",
+        "type": "process",
+        "command": "dotnet",
+        "args": ["publish", "${workspaceFolder}/src/EuroCoins", "-c", "Release", "-r", "win-x64", "-p:Platform=x64", "-o", "${workspaceFolder}/artifacts/EuroCoins-win-x64"],
+        "problemMatcher": "$msCompile"
+      },
+      {
+        "label": "Publish portable app (ARM64)",
+        "type": "process",
+        "command": "dotnet",
+        "args": ["publish", "${workspaceFolder}/src/EuroCoins", "-c", "Release", "-r", "win-arm64", "-p:Platform=ARM64", "-o", "${workspaceFolder}/artifacts/EuroCoins-win-arm64"],
+        "problemMatcher": "$msCompile"
+      },
+      {
+        "label": "Update catalog from ECB",
+        "type": "process",
+        "command": "dotnet",
+        "args": ["run", "--project", "${workspaceFolder}/tools/EuroCoins.CatalogTool", "--", "update"],
+        "problemMatcher": []
+      },
+      {
+        "label": "Check for package updates",
+        "type": "process",
+        "command": "dotnet",
+        "args": ["list", "${workspaceFolder}/EuroCoins.slnx", "package", "--outdated"],
+        "problemMatcher": []
+      }
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "EuroCoins (x64)",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "Build app (x64)",
+        "program": "${workspaceFolder}/src/EuroCoins/bin/x64/Debug/net10.0-windows10.0.26100.0/win-x64/EuroCoins.exe",
+        "cwd": "${workspaceFolder}/src/EuroCoins/bin/x64/Debug/net10.0-windows10.0.26100.0/win-x64",
+        "console": "internalConsole",
+        "stopAtEntry": false,
+        "justMyCode": true
+      },
+      {
+        "name": "EuroCoins (ARM64, e.g. Surface)",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "Build app (ARM64)",
+        "program": "${workspaceFolder}/src/EuroCoins/bin/ARM64/Debug/net10.0-windows10.0.26100.0/win-arm64/EuroCoins.exe",
+        "cwd": "${workspaceFolder}/src/EuroCoins/bin/ARM64/Debug/net10.0-windows10.0.26100.0/win-arm64",
+        "console": "internalConsole",
+        "stopAtEntry": false,
+        "justMyCode": true
+      },
+      {
+        "name": "Catalog tool: update from ECB",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "Build catalog tool",
+        "program": "${workspaceFolder}/tools/EuroCoins.CatalogTool/bin/Debug/net10.0-windows/EuroCoins.CatalogTool.dll",
+        "args": ["update"],
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal",
+        "stopAtEntry": false
+      },
+      {
+        "name": "Attach to running EuroCoins",
+        "type": "coreclr",
+        "request": "attach",
+        "processId": "${command:pickProcess}"
+      }
+    ]
+  }
+}

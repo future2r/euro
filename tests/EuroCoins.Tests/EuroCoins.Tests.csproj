@@ -1,0 +1,18 @@
+<Project Sdk="MSTest.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <RootNamespace>EuroCoins.Tests</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\EuroCoins.Core\EuroCoins.Core.csproj" />
+        <ProjectReference Include="..\..\tools\EuroCoins.CatalogTool\EuroCoins.CatalogTool.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- The real catalog that ships with the app. -->
+        <None Include="..\..\src\EuroCoins\Assets\Catalog\catalog.json" Link="TestData\catalog.json" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
+</Project>

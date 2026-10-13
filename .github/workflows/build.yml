@@ -1,0 +1,48 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, windows-11-arm]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - name: Test
+        run: dotnet test --project tests/EuroCoins.Tests
+
+  publish:
+    name: Publish (${{ matrix.rid }})
+    needs: test
+    strategy:
+      matrix:
+        include:
+          - rid: win-x64
+            platform: x64
+          - rid: win-arm64
+            platform: ARM64
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - name: Publish
+        run: dotnet publish src/EuroCoins -c Release -r ${{ matrix.rid }} -p:Platform=${{ matrix.platform }} -o artifacts/EuroCoins-${{ matrix.rid }}
+      - uses: actions/upload-artifact@v5
+        with:
+          name: EuroCoins-${{ matrix.rid }}
+          path: artifacts/EuroCoins-${{ matrix.rid }}

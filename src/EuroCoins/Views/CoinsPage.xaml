@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="EuroCoins.Views.CoinsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:views="using:EuroCoins.Views"
+    xmlns:vm="using:EuroCoins.ViewModels">
+
+    <Page.Resources>
+        <!-- Labels in the details pane (Country, Type, …). -->
+        <Style x:Key="DetailsLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
+        </Style>
+
+        <CollectionViewSource
+            x:Name="GroupedCoins"
+            IsSourceGrouped="True"
+            ItemsPath="Items"
+            Source="{x:Bind ViewModel.Groups}" />
+
+        <!-- Multi-select filter option (country, face value, year). -->
+        <DataTemplate x:Key="FilterOptionTemplate" x:DataType="vm:FilterOptionViewModel">
+            <CheckBox MinWidth="0" AutomationProperties.Name="{x:Bind Label}" IsChecked="{x:Bind IsSelected, Mode=TwoWay}">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Image
+                        Source="{x:Bind Icon}"
+                        Style="{StaticResource FlagImageStyle}"
+                        Visibility="{x:Bind HasIcon}" />
+                    <TextBlock Text="{x:Bind Label}" />
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}" Text="{x:Bind Detail}" />
+                </StackPanel>
+            </CheckBox>
+        </DataTemplate>
+
+        <!-- Group heading: flag (when grouped by country), title and number of coins. -->
+        <DataTemplate x:Key="GroupHeaderTemplate" x:DataType="vm:CoinGroupViewModel">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Image
+                    Source="{x:Bind Flag}"
+                    Style="{StaticResource FlagImageStyle}"
+                    Visibility="{x:Bind HasFlag}" />
+                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind Title}" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{x:Bind CountText}" />
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid>
+        <SplitView
+            x:Name="DetailsSplitView"
+            DisplayMode="Inline"
+            IsPaneOpen="{x:Bind ViewModel.IsDetailsPaneOpen, Mode=TwoWay}"
+            OpenPaneLength="{StaticResource DetailsPaneWidth}"
+            PaneBackground="{ThemeResource LayerFillColorDefaultBrush}"
+            PanePlacement="Right">
+
+            <!-- Details pane -->
+            <SplitView.Pane>
+                <ScrollViewer BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1,0,0,0">
+                    <StackPanel Padding="24,12,24,28" Spacing="14">
+                        <Grid>
+                            <TextBlock
+                                x:Uid="Details_Header"
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{StaticResource CaptionTextBlockStyle}" />
+                            <Button
+                                x:Uid="Details_Close"
+                                HorizontalAlignment="Right"
+                                Command="{x:Bind ViewModel.ToggleDetailsPaneCommand}"
+                                Style="{StaticResource SubtleButtonStyle}">
+                                <FontIcon FontSize="12" Glyph="&#xE711;" />
+                            </Button>
+                        </Grid>
+
+                        <StackPanel Spacing="14" Visibility="{x:Bind ViewModel.HasDetails, Mode=OneWay}">
+                            <Button
+                                x:Uid="Details_Enlarge"
+                                HorizontalAlignment="Center"
+                                Padding="0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.Details.EnlargeCommand, Mode=OneWay}"
+                                CornerRadius="92">
+                                <Border Width="184" Height="184" CornerRadius="92">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="{x:Bind ViewModel.Details.LargeImage, Mode=OneWay}" Stretch="UniformToFill" />
+                                    </Border.Background>
+                                </Border>
+                            </Button>
+                            <StackPanel HorizontalAlignment="Center" Spacing="2">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Text="{x:Bind ViewModel.Details.ImageCredit, Mode=OneWay}"
+                                    TextAlignment="Center"
+                                    TextWrapping="Wrap" />
+                                <HyperlinkButton
+                                    x:Uid="Details_Source"
+                                    Padding="4,0"
+                                    HorizontalAlignment="Center"
+                                    FontSize="12"
+                                    NavigateUri="{x:Bind ViewModel.Details.ImageSourcePage, Mode=OneWay}" />
+                            </StackPanel>
+
+                            <TextBlock
+                                Style="{StaticResource SubtitleTextBlockStyle}"
+                                Text="{x:Bind ViewModel.Details.Title, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+
+                            <Grid ColumnSpacing="12" RowSpacing="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="92" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock x:Uid="Details_Country" Style="{StaticResource DetailsLabelStyle}" />
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                                    <Image Source="{x:Bind ViewModel.Details.Flag, Mode=OneWay}" Style="{StaticResource FlagImageStyle}" />
+                                    <TextBlock Text="{x:Bind ViewModel.Details.CountryName, Mode=OneWay}" />
+                                </StackPanel>
+                                <TextBlock x:Uid="Details_Type" Grid.Row="1" Style="{StaticResource DetailsLabelStyle}" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind ViewModel.Details.TypeLabel, Mode=OneWay}" />
+                                <TextBlock x:Uid="Details_Denomination" Grid.Row="2" Style="{StaticResource DetailsLabelStyle}" />
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind ViewModel.Details.DenominationLabel, Mode=OneWay}" />
+                                <TextBlock x:Uid="Details_Year" Grid.Row="3" Style="{StaticResource DetailsLabelStyle}" />
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind ViewModel.Details.YearText, Mode=OneWay}" />
+                                <TextBlock x:Uid="Details_Series" Grid.Row="4" Style="{StaticResource DetailsLabelStyle}" />
+                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{x:Bind ViewModel.Details.Series, Mode=OneWay}" TextWrapping="Wrap" />
+                                <TextBlock x:Uid="Details_CatalogId" Grid.Row="5" Style="{StaticResource DetailsLabelStyle}" />
+                                <TextBlock
+                                    Grid.Row="5"
+                                    Grid.Column="1"
+                                    FontFamily="Consolas"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    IsTextSelectionEnabled="True"
+                                    Text="{x:Bind ViewModel.Details.Id, Mode=OneWay}"
+                                    TextWrapping="Wrap" />
+                            </Grid>
+
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                IsTextSelectionEnabled="True"
+                                MaxLines="8"
+                                Text="{x:Bind ViewModel.Details.Description, Mode=OneWay}"
+                                TextTrimming="WordEllipsis"
+                                TextWrapping="Wrap" />
+
+                            <MenuFlyoutSeparator />
+
+                            <ToggleSwitch x:Uid="Details_Owned" IsOn="{x:Bind ViewModel.Details.IsOwned, Mode=TwoWay}" />
+                            <NumberBox
+                                x:Uid="Details_Quantity"
+                                Minimum="0"
+                                Maximum="9999"
+                                SmallChange="1"
+                                SpinButtonPlacementMode="Inline"
+                                Value="{x:Bind ViewModel.Details.Quantity, Mode=TwoWay}" />
+                            <TextBlock
+                                x:Uid="Details_QuantityHint"
+                                Margin="0,-8,0,0"
+                                Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                Style="{StaticResource CaptionTextBlockStyle}"
+                                TextWrapping="Wrap" />
+                            <StackPanel Orientation="Horizontal" Spacing="6" Visibility="{x:Bind ViewModel.Details.IsOwned, Mode=OneWay}">
+                                <TextBlock x:Uid="Details_OwnedSince" Style="{StaticResource DetailsLabelStyle}" />
+                                <TextBlock Text="{x:Bind ViewModel.Details.AddedText, Mode=OneWay}" />
+                            </StackPanel>
+                            <TextBox
+                                x:Uid="Details_Note"
+                                Height="96"
+                                AcceptsReturn="True"
+                                Text="{x:Bind ViewModel.Details.Note, Mode=TwoWay}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </SplitView.Pane>
+
+            <!-- Coin list -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Padding="28,22,28,0" Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{x:Bind ViewModel.Title, Mode=OneWay}" />
+                        <TextBlock
+                            Margin="0,0,0,4"
+                            VerticalAlignment="Bottom"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind ViewModel.CountText, Mode=OneWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="12" Visibility="{x:Bind ViewModel.ShowProgress, Mode=OneWay}">
+                        <ProgressBar Width="180" VerticalAlignment="Center" Maximum="100" Value="{x:Bind ViewModel.ProgressValue, Mode=OneWay}" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="{x:Bind ViewModel.ProgressText, Mode=OneWay}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Filter bar -->
+                <Grid Grid.Row="1" Padding="28,16,28,8" ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <controls:WrapPanel HorizontalSpacing="8" VerticalSpacing="8">
+                        <DropDownButton AutomationProperties.Name="{x:Bind ViewModel.CountryFilterLabel, Mode=OneWay}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="14" Glyph="&#xE909;" />
+                                <TextBlock Text="{x:Bind ViewModel.CountryFilterLabel, Mode=OneWay}" />
+                            </StackPanel>
+                            <DropDownButton.Flyout>
+                                <Flyout Placement="BottomEdgeAlignedLeft">
+                                    <StackPanel Width="280" Spacing="6">
+                                        <ScrollViewer MaxHeight="360">
+                                            <ItemsRepeater ItemTemplate="{StaticResource FilterOptionTemplate}" ItemsSource="{x:Bind ViewModel.CountryOptions}" />
+                                        </ScrollViewer>
+                                        <MenuFlyoutSeparator />
+                                        <Grid>
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Style="{StaticResource CaptionTextBlockStyle}"
+                                                Text="{x:Bind ViewModel.SelectedCountriesText, Mode=OneWay}" />
+                                            <HyperlinkButton x:Uid="Filter_ClearSelection" HorizontalAlignment="Right" Command="{x:Bind ViewModel.ClearCountriesCommand}" />
+                                        </Grid>
+                                    </StackPanel>
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <DropDownButton AutomationProperties.Name="{x:Bind ViewModel.OwnershipFilterLabel, Mode=OneWay}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="14" Glyph="&#xE73E;" />
+                                <TextBlock Text="{x:Bind ViewModel.OwnershipFilterLabel, Mode=OneWay}" />
+                            </StackPanel>
+                            <DropDownButton.Flyout>
+                                <MenuFlyout Opening="OnOwnershipMenuOpening" Placement="BottomEdgeAlignedLeft">
+                                    <RadioMenuFlyoutItem x:Uid="Filter_OwnershipAll" Command="{x:Bind ViewModel.SetOwnershipCommand}" CommandParameter="All" GroupName="Ownership" />
+                                    <RadioMenuFlyoutItem x:Uid="Filter_OwnershipOwned" Command="{x:Bind ViewModel.SetOwnershipCommand}" CommandParameter="Owned" GroupName="Ownership" />
+                                    <RadioMenuFlyoutItem x:Uid="Filter_OwnershipMissing" Command="{x:Bind ViewModel.SetOwnershipCommand}" CommandParameter="Missing" GroupName="Ownership" />
+                                </MenuFlyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <DropDownButton Content="{x:Bind ViewModel.DenominationFilterLabel, Mode=OneWay}">
+                            <DropDownButton.Flyout>
+                                <Flyout Placement="BottomEdgeAlignedLeft">
+                                    <ItemsRepeater Width="160" ItemTemplate="{StaticResource FilterOptionTemplate}" ItemsSource="{x:Bind ViewModel.DenominationOptions}" />
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <DropDownButton Content="{x:Bind ViewModel.YearFilterLabel, Mode=OneWay}">
+                            <DropDownButton.Flyout>
+                                <Flyout Placement="BottomEdgeAlignedLeft">
+                                    <ScrollViewer MaxHeight="360">
+                                        <ItemsRepeater Width="140" ItemTemplate="{StaticResource FilterOptionTemplate}" ItemsSource="{x:Bind ViewModel.YearOptions}" />
+                                    </ScrollViewer>
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <HyperlinkButton x:Uid="Filter_Reset" Command="{x:Bind ViewModel.ResetFiltersCommand}" Visibility="{x:Bind ViewModel.HasActiveFilters, Mode=OneWay}" />
+                    </controls:WrapPanel>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Orientation="Horizontal" Spacing="8">
+                        <DropDownButton AutomationProperties.Name="{x:Bind ViewModel.SortLabel, Mode=OneWay}" Background="Transparent" BorderThickness="0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="14" Glyph="&#xE8CB;" />
+                                <TextBlock x:Name="SortLabelText" Text="{x:Bind ViewModel.SortLabel, Mode=OneWay}" />
+                            </StackPanel>
+                            <DropDownButton.Flyout>
+                                <MenuFlyout Opening="OnSortMenuOpening" Placement="BottomEdgeAlignedRight">
+                                    <RadioMenuFlyoutItem x:Uid="Sort_Country" Command="{x:Bind ViewModel.SetSortOrderCommand}" CommandParameter="Country" GroupName="Sort" />
+                                    <RadioMenuFlyoutItem x:Uid="Sort_Year" Command="{x:Bind ViewModel.SetSortOrderCommand}" CommandParameter="Year" GroupName="Sort" />
+                                    <RadioMenuFlyoutItem x:Uid="Sort_Denomination" Command="{x:Bind ViewModel.SetSortOrderCommand}" CommandParameter="Denomination" GroupName="Sort" />
+                                </MenuFlyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <!-- View menu like "View" in File Explorer; the icon shows the current view. -->
+                        <DropDownButton x:Uid="View_Menu" Background="Transparent" BorderThickness="0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="14" Glyph="{x:Bind views:XamlFunctions.ViewModeGlyph(ViewModel.ViewMode), Mode=OneWay}" />
+                                <TextBlock x:Name="ViewLabelText" x:Uid="View_MenuLabel" />
+                            </StackPanel>
+                            <DropDownButton.Flyout>
+                                <MenuFlyout Opening="OnViewMenuOpening" Placement="BottomEdgeAlignedRight">
+                                    <RadioMenuFlyoutItem x:Uid="View_Grid" Command="{x:Bind ViewModel.SetViewModeCommand}" CommandParameter="Grid" GroupName="View">
+                                        <RadioMenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xF0E2;" />
+                                        </RadioMenuFlyoutItem.Icon>
+                                    </RadioMenuFlyoutItem>
+                                    <RadioMenuFlyoutItem x:Uid="View_List" Command="{x:Bind ViewModel.SetViewModeCommand}" CommandParameter="List" GroupName="View">
+                                        <RadioMenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE8FD;" />
+                                        </RadioMenuFlyoutItem.Icon>
+                                    </RadioMenuFlyoutItem>
+                                    <MenuFlyoutSeparator />
+                                    <MenuFlyoutItem x:Uid="View_ZoomIn" Command="{x:Bind ViewModel.ZoomInCommand}">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE8A3;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem x:Uid="View_ZoomOut" Command="{x:Bind ViewModel.ZoomOutCommand}">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE71F;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                </MenuFlyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <ToggleButton x:Uid="View_DetailsPane" IsChecked="{x:Bind ViewModel.IsDetailsPaneOpen, Mode=TwoWay}">
+                            <FontIcon FontSize="14" Glyph="&#xE89F;" />
+                        </ToggleButton>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Empty state -->
+                <StackPanel
+                    Grid.Row="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="12"
+                    Visibility="{x:Bind ViewModel.IsEmpty, Mode=OneWay}">
+                    <FontIcon FontSize="40" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Glyph="&#xE721;" />
+                    <TextBlock x:Uid="Coins_Empty" HorizontalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <Button
+                        x:Uid="Coins_EmptyReset"
+                        HorizontalAlignment="Center"
+                        Command="{x:Bind ViewModel.ResetFiltersCommand}"
+                        Visibility="{x:Bind ViewModel.HasActiveFilters, Mode=OneWay}" />
+                </StackPanel>
+
+                <!-- Grid view -->
+                <GridView
+                    x:Name="CoinGrid"
+                    Grid.Row="2"
+                    Padding="22,0,22,24"
+                    ItemsSource="{x:Bind GroupedCoins.View, Mode=OneWay}"
+                    ContextRequested="OnListContextRequested"
+                    PreviewKeyDown="OnListKeyDown"
+                    Loaded="OnCoinGridLoaded"
+                    ScrollViewer.ZoomMode="Enabled"
+                    SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
+                    Visibility="{x:Bind views:XamlFunctions.GridVisibility(ViewModel.ViewMode, ViewModel.IsEmpty), Mode=OneWay}">
+                    <GridView.GroupStyle>
+                        <GroupStyle HeaderTemplate="{StaticResource GroupHeaderTemplate}" />
+                    </GridView.GroupStyle>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Loaded="OnItemsPanelLoaded" Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:CoinItemViewModel">
+                            <Viewbox Stretch="Uniform">
+                                <Grid Width="150" Height="196" Padding="8,14,8,10" Background="Transparent">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="112" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        Width="112"
+                                        Height="112"
+                                        CornerRadius="56"
+                                        Opacity="{x:Bind ImageOpacity, Mode=OneWay}">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{x:Bind Thumbnail}" Stretch="UniformToFill" />
+                                        </Border.Background>
+                                    </Border>
+                                    <!-- Ownership badge: tap to toggle. -->
+                                    <Button
+                                        Width="28"
+                                        Height="28"
+                                        Margin="0,0,10,0"
+                                        Padding="0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        AutomationProperties.Name="{x:Bind ToggleOwnedLabel, Mode=OneWay}"
+                                        Command="{x:Bind ToggleOwnedCommand}"
+                                        CornerRadius="14"
+                                        Style="{x:Bind views:CoinTemplates.BadgeStyle(IsOwned), Mode=OneWay}"
+                                        ToolTipService.ToolTip="{x:Bind ToggleOwnedLabel, Mode=OneWay}">
+                                        <FontIcon FontSize="12" Glyph="{x:Bind views:CoinTemplates.BadgeGlyph(IsOwned), Mode=OneWay}" />
+                                    </Button>
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Margin="0,10,0,0"
+                                        FontSize="13"
+                                        FontWeight="SemiBold"
+                                        MaxLines="2"
+                                        Text="{x:Bind Title}"
+                                        TextAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        TextWrapping="Wrap" />
+                                    <StackPanel
+                                        Grid.Row="2"
+                                        Margin="0,4,0,0"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal"
+                                        Spacing="6">
+                                        <Image Source="{x:Bind Flag}" Style="{StaticResource FlagImageStyle}" />
+                                        <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Style="{StaticResource CaptionTextBlockStyle}" Text="{x:Bind Meta}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Viewbox>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+
+                <!-- List view -->
+                <ListView
+                    x:Name="CoinList"
+                    Grid.Row="2"
+                    Padding="18,0,18,20"
+                    ItemsSource="{x:Bind GroupedCoins.View, Mode=OneWay}"
+                    ContextRequested="OnListContextRequested"
+                    PreviewKeyDown="OnListKeyDown"
+                    Loaded="OnCoinListLoaded"
+                    ContainerContentChanging="OnCoinListContainerContentChanging"
+                    SizeChanged="OnCoinListSizeChanged"
+                    SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
+                    Visibility="{x:Bind views:XamlFunctions.ListVisibility(ViewModel.ViewMode, ViewModel.IsEmpty), Mode=OneWay}">
+                    <ListView.Header>
+                        <!-- Column headings; widths and margin match the item template and the item padding.
+                             In a narrow list the code-behind hides the type column and the country name. -->
+                        <Grid
+                            x:Name="ListHeader"
+                            Height="34"
+                            Margin="16,0,12,4"
+                            BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                            BorderThickness="0,0,0,1"
+                            ColumnSpacing="12">
+                            <Grid.Resources>
+                                <Style BasedOn="{StaticResource CaptionTextBlockStyle}" TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
+                                </Style>
+                            </Grid.Resources>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="36" />
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="110" />
+                                <ColumnDefinition Width="64" />
+                                <ColumnDefinition Width="48" />
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="44" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Uid="List_Country" Grid.Column="1" />
+                            <TextBlock x:Uid="List_Title" Grid.Column="2" />
+                            <TextBlock x:Uid="List_Type" Grid.Column="3" />
+                            <TextBlock x:Uid="List_Denomination" Grid.Column="4" />
+                            <TextBlock x:Uid="List_Year" Grid.Column="5" />
+                            <TextBlock x:Uid="List_Owned" Grid.Column="6" />
+                            <TextBlock x:Uid="List_Quantity" Grid.Column="7" HorizontalAlignment="Right" />
+                        </Grid>
+                    </ListView.Header>
+                    <ListView.GroupStyle>
+                        <GroupStyle HeaderTemplate="{StaticResource GroupHeaderTemplate}" />
+                    </ListView.GroupStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:CoinItemViewModel">
+                            <Grid Height="48" ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="36" />
+                                    <ColumnDefinition Width="140" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="110" />
+                                    <ColumnDefinition Width="64" />
+                                    <ColumnDefinition Width="48" />
+                                    <ColumnDefinition Width="40" />
+                                    <ColumnDefinition Width="44" />
+                                </Grid.ColumnDefinitions>
+                                <Border Width="34" Height="34" CornerRadius="17" Opacity="{x:Bind ImageOpacity, Mode=OneWay}">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="{x:Bind Thumbnail}" Stretch="UniformToFill" />
+                                    </Border.Background>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                                    <Image Source="{x:Bind Flag}" Style="{StaticResource FlagImageStyle}" />
+                                    <TextBlock Text="{x:Bind CountryName}" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind Title}" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Grid.Column="3" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{x:Bind TypeLabel}" />
+                                <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="{x:Bind DenominationLabel}" />
+                                <TextBlock Grid.Column="5" VerticalAlignment="Center" Text="{x:Bind YearText}" />
+                                <FontIcon
+                                    Grid.Column="6"
+                                    FontSize="14"
+                                    Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                    Glyph="&#xE73E;"
+                                    Visibility="{x:Bind IsOwned, Mode=OneWay}" />
+                                <TextBlock
+                                    Grid.Column="7"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="{x:Bind Quantity, Mode=OneWay}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </SplitView>
+
+        <!-- Enlarged coin image -->
+        <Grid
+            x:Name="Lightbox"
+            Background="{ThemeResource SmokeFillColorDefaultBrush}"
+            SizeChanged="OnLightboxSizeChanged"
+            Tapped="OnLightboxTapped"
+            Visibility="{x:Bind ViewModel.IsEnlarged, Mode=OneWay}">
+            <!-- The smoke layer is dark in both themes, so the texts use the dark theme's brushes. -->
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" RequestedTheme="Dark" Spacing="18">
+                <!-- Size and corner radius are set to fit the window (OnLightboxSizeChanged). -->
+                <Border x:Name="LightboxImage">
+                    <Border.Background>
+                        <ImageBrush ImageSource="{x:Bind ViewModel.EnlargedItem.LargeImage, Mode=OneWay}" Stretch="UniformToFill" />
+                    </Border.Background>
+                </Border>
+                <TextBlock
+                    MaxWidth="640"
+                    HorizontalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Text="{x:Bind ViewModel.EnlargedItem.Title, Mode=OneWay}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    x:Uid="Lightbox_Hint"
+                    HorizontalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}" />
+            </StackPanel>
+        </Grid>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="WideState">
+                    <VisualState.StateTriggers>
+                        <!-- Same breakpoint as in CoinsPage.OnNavigatedTo. -->
+                        <AdaptiveTrigger MinWindowWidth="1000" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="DetailsSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="DetailsSplitView.PaneBackground" Value="{ThemeResource SolidBackgroundFillColorBaseBrush}" />
+                        <Setter Target="SortLabelText.Visibility" Value="Collapsed" />
+                        <Setter Target="ViewLabelText.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</Page>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+
+    <!-- App and window -->
+    <data name="App_Title" xml:space="preserve"><value>Euro-Münzsammlung</value></data>
+    <data name="AppTitleBar.Title" xml:space="preserve"><value>Euro-Münzsammlung</value></data>
+    <data name="SearchBox.PlaceholderText" xml:space="preserve"><value>Münzen durchsuchen</value></data>
+    <data name="Collection_NotLoadedTitle" xml:space="preserve"><value>Die Sammlung konnte nicht geladen werden.</value></data>
+    <data name="Collection_NotLoadedMessage" xml:space="preserve"><value>Änderungen werden erst gespeichert, wenn die Sammlung geladen ist. Versuchen Sie es erneut oder wählen Sie in den Einstellungen einen anderen Speicherort.</value></data>
+    <data name="Collection_SaveFailedTitle" xml:space="preserve"><value>Die Sammlung konnte nicht gespeichert werden.</value></data>
+    <data name="Collection_Retry.Content" xml:space="preserve"><value>Erneut laden</value></data>
+    <data name="Search_ShowAll" xml:space="preserve"><value>Alle Ergebnisse für „{0}“ anzeigen</value></data>
+
+    <!-- Navigation -->
+    <data name="Nav_OverviewItem.Content" xml:space="preserve"><value>Übersicht</value></data>
+    <data name="Nav_AllItem.Content" xml:space="preserve"><value>Alle Münzen</value></data>
+    <data name="Nav_CirculationItem.Content" xml:space="preserve"><value>Umlaufmünzen</value></data>
+    <data name="Nav_CommemorativeItem.Content" xml:space="preserve"><value>2-€-Gedenkmünzen</value></data>
+    <data name="Nav_All" xml:space="preserve"><value>Alle Münzen</value></data>
+    <data name="Nav_Circulation" xml:space="preserve"><value>Umlaufmünzen</value></data>
+    <data name="Nav_Commemorative" xml:space="preserve"><value>2-€-Gedenkmünzen</value></data>
+
+    <!-- Overview -->
+    <data name="Overview_Title.Text" xml:space="preserve"><value>Übersicht</value></data>
+    <data name="Overview_Subtitle.Text" xml:space="preserve"><value>Stand Ihrer Sammlung</value></data>
+    <data name="Overview_Total" xml:space="preserve"><value>Gesamt</value></data>
+    <data name="Overview_OwnedOfTotal" xml:space="preserve"><value>{0} / {1} Münzen</value></data>
+    <data name="Overview_ByCountry.Text" xml:space="preserve"><value>Fortschritt nach Land</value></data>
+    <data name="Overview_ByCountryHint.Text" xml:space="preserve"><value>Klicken filtert die Münzliste</value></data>
+    <data name="Overview_Recent.Text" xml:space="preserve"><value>Zuletzt hinzugefügt</value></data>
+    <data name="Overview_NoRecent.Text" xml:space="preserve"><value>Noch keine Münzen in der Sammlung. Markieren Sie eine Münze in der Liste als „im Besitz“.</value></data>
+
+    <!-- Coin list -->
+    <data name="Key_Space" xml:space="preserve"><value>Leertaste</value></data>
+    <data name="Coins_SearchResults" xml:space="preserve"><value>Suchergebnisse</value></data>
+    <data name="Coins_SearchCount" xml:space="preserve"><value>„{0}“ · {1}</value></data>
+    <data name="Coins_CountOne" xml:space="preserve"><value>{0} Münze</value></data>
+    <data name="Coins_CountMany" xml:space="preserve"><value>{0} Münzen</value></data>
+    <data name="Coins_Progress" xml:space="preserve"><value>{0} von {1} Münzen im Besitz · {2:P0}</value></data>
+    <data name="Coins_Empty.Text" xml:space="preserve"><value>Keine Münzen für diese Auswahl.</value></data>
+    <data name="Coins_EmptyReset.Content" xml:space="preserve"><value>Filter zurücksetzen</value></data>
+    <data name="CoinType_Circulation" xml:space="preserve"><value>Umlaufmünze</value></data>
+    <data name="CoinType_Commemorative" xml:space="preserve"><value>Gedenkmünze</value></data>
+    <data name="Coin_Owned" xml:space="preserve"><value>Im Besitz</value></data>
+    <data name="Coin_Missing" xml:space="preserve"><value>Fehlt</value></data>
+    <data name="Coin_MarkOwned" xml:space="preserve"><value>Als im Besitz markieren</value></data>
+    <data name="Coin_MarkMissing" xml:space="preserve"><value>Als fehlend markieren</value></data>
+    <data name="Coin_IncreaseQuantity" xml:space="preserve"><value>Anzahl erhöhen</value></data>
+    <data name="Coin_ShowDetails" xml:space="preserve"><value>Details anzeigen</value></data>
+    <data name="Coin_Enlarge" xml:space="preserve"><value>Bild vergrößern</value></data>
+    <data name="Lightbox_Hint.Text" xml:space="preserve"><value>Klicken oder Esc zum Schließen</value></data>
+
+    <!-- Filter bar, sort and view menus -->
+    <data name="Filter_Country" xml:space="preserve"><value>Land</value></data>
+    <data name="Filter_SelectedCount" xml:space="preserve"><value>{0} ausgewählt</value></data>
+    <data name="Filter_ClearSelection.Content" xml:space="preserve"><value>Auswahl aufheben</value></data>
+    <data name="Filter_Ownership" xml:space="preserve"><value>Besitz</value></data>
+    <data name="Filter_OwnedOnly" xml:space="preserve"><value>Nur im Besitz</value></data>
+    <data name="Filter_MissingOnly" xml:space="preserve"><value>Nur fehlende</value></data>
+    <data name="Filter_OwnershipAll.Text" xml:space="preserve"><value>Alle</value></data>
+    <data name="Filter_OwnershipOwned.Text" xml:space="preserve"><value>Nur im Besitz</value></data>
+    <data name="Filter_OwnershipMissing.Text" xml:space="preserve"><value>Nur fehlende</value></data>
+    <data name="Filter_Denomination" xml:space="preserve"><value>Nennwert</value></data>
+    <data name="Filter_Year" xml:space="preserve"><value>Jahr</value></data>
+    <data name="Filter_Reset.Content" xml:space="preserve"><value>Filter zurücksetzen</value></data>
+    <data name="Sort_ByCountry" xml:space="preserve"><value>Sortieren: Land</value></data>
+    <data name="Sort_ByYear" xml:space="preserve"><value>Sortieren: Jahr</value></data>
+    <data name="Sort_ByDenomination" xml:space="preserve"><value>Sortieren: Nennwert</value></data>
+    <data name="Sort_Country.Text" xml:space="preserve"><value>Land</value></data>
+    <data name="Sort_Year.Text" xml:space="preserve"><value>Jahr</value></data>
+    <data name="Sort_Denomination.Text" xml:space="preserve"><value>Nennwert</value></data>
+    <data name="View_Menu.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Ansicht</value></data>
+    <data name="View_MenuLabel.Text" xml:space="preserve"><value>Ansicht</value></data>
+    <data name="View_Grid.Text" xml:space="preserve"><value>Raster</value></data>
+    <data name="View_Grid.KeyboardAcceleratorTextOverride" xml:space="preserve"><value>Strg+Umschalt+1</value></data>
+    <data name="View_List.Text" xml:space="preserve"><value>Liste</value></data>
+    <data name="View_List.KeyboardAcceleratorTextOverride" xml:space="preserve"><value>Strg+Umschalt+2</value></data>
+    <data name="View_ZoomIn.Text" xml:space="preserve"><value>Größer</value></data>
+    <data name="View_ZoomIn.KeyboardAcceleratorTextOverride" xml:space="preserve"><value>Strg+Plus</value></data>
+    <data name="View_ZoomOut.Text" xml:space="preserve"><value>Kleiner</value></data>
+    <data name="View_ZoomOut.KeyboardAcceleratorTextOverride" xml:space="preserve"><value>Strg+Minus</value></data>
+    <data name="View_DetailsPane.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Detailbereich ein-/ausblenden</value></data>
+    <data name="View_DetailsPane.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Detailbereich ein-/ausblenden</value></data>
+
+    <!-- List view column headings -->
+    <data name="List_Country.Text" xml:space="preserve"><value>Land</value></data>
+    <data name="List_Title.Text" xml:space="preserve"><value>Titel</value></data>
+    <data name="List_Type.Text" xml:space="preserve"><value>Art</value></data>
+    <data name="List_Denomination.Text" xml:space="preserve"><value>Nennwert</value></data>
+    <data name="List_Year.Text" xml:space="preserve"><value>Jahr</value></data>
+    <data name="List_Owned.Text" xml:space="preserve"><value>Besitz</value></data>
+    <data name="List_Quantity.Text" xml:space="preserve"><value>Anzahl</value></data>
+
+    <!-- Details pane -->
+    <data name="Details_Header.Text" xml:space="preserve"><value>Details</value></data>
+    <data name="Details_Close.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Detailbereich schließen</value></data>
+    <data name="Details_Close.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Detailbereich schließen</value></data>
+    <data name="Details_Enlarge.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Klicken zum Vergrößern</value></data>
+    <data name="Details_Enlarge.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Bild vergrößern</value></data>
+    <data name="Details_Source.Content" xml:space="preserve"><value>Zur Quelle (EZB)</value></data>
+    <data name="Details_Country.Text" xml:space="preserve"><value>Land</value></data>
+    <data name="Details_Type.Text" xml:space="preserve"><value>Art</value></data>
+    <data name="Details_Denomination.Text" xml:space="preserve"><value>Nennwert</value></data>
+    <data name="Details_Year.Text" xml:space="preserve"><value>Jahr</value></data>
+    <data name="Details_Series.Text" xml:space="preserve"><value>Serie</value></data>
+    <data name="Details_CatalogId.Text" xml:space="preserve"><value>Katalog-ID</value></data>
+    <data name="Details_Owned.Header" xml:space="preserve"><value>Im Besitz</value></data>
+    <data name="Details_Owned.OnContent" xml:space="preserve"><value>Ein</value></data>
+    <data name="Details_Owned.OffContent" xml:space="preserve"><value>Aus</value></data>
+    <data name="Details_Quantity.Header" xml:space="preserve"><value>Anzahl</value></data>
+    <data name="Details_QuantityHint.Text" xml:space="preserve"><value>Ab Anzahl 1 gilt die Münze als im Besitz.</value></data>
+    <data name="Details_OwnedSince.Text" xml:space="preserve"><value>Im Besitz seit</value></data>
+    <data name="Details_Note.Header" xml:space="preserve"><value>Notiz</value></data>
+    <data name="Details_Note.PlaceholderText" xml:space="preserve"><value>Eigene Notizen zu dieser Münze …</value></data>
+
+    <!-- Settings -->
+    <data name="Settings_Title.Text" xml:space="preserve"><value>Einstellungen</value></data>
+    <data name="Settings_RestartInfo.Title" xml:space="preserve"><value>Neustart erforderlich</value></data>
+    <data name="Settings_RestartInfo.Message" xml:space="preserve"><value>Die neue Sprache wird nach dem Neustart der App verwendet.</value></data>
+    <data name="Settings_RestartNow.Content" xml:space="preserve"><value>Jetzt neu starten</value></data>
+    <data name="Settings_Appearance.Text" xml:space="preserve"><value>Darstellung</value></data>
+    <data name="Settings_Theme.Header" xml:space="preserve"><value>App-Design</value></data>
+    <data name="Settings_Theme.Description" xml:space="preserve"><value>Wählen Sie aus, welches App-Design angezeigt werden soll.</value></data>
+    <data name="Settings_ThemeSystemOption.Content" xml:space="preserve"><value>Systemeinstellung verwenden</value></data>
+    <data name="Settings_ThemeLightOption.Content" xml:space="preserve"><value>Hell</value></data>
+    <data name="Settings_ThemeDarkOption.Content" xml:space="preserve"><value>Dunkel</value></data>
+    <data name="Settings_ThemeSystem" xml:space="preserve"><value>Systemeinstellung verwenden</value></data>
+    <data name="Settings_ThemeLight" xml:space="preserve"><value>Hell</value></data>
+    <data name="Settings_ThemeDark" xml:space="preserve"><value>Dunkel</value></data>
+    <data name="Settings_Language.Header" xml:space="preserve"><value>Sprache</value></data>
+    <data name="Settings_Language.Description" xml:space="preserve"><value>Sprache der Benutzeroberfläche</value></data>
+    <data name="Settings_LanguageWindows.Content" xml:space="preserve"><value>Windows-Einstellung verwenden</value></data>
+    <data name="Settings_Collection.Text" xml:space="preserve"><value>Sammlung</value></data>
+    <data name="Settings_Location.Header" xml:space="preserve"><value>Speicherort der Sammlung</value></data>
+    <data name="Settings_ChangeLocation.Content" xml:space="preserve"><value>Ändern …</value></data>
+    <data name="Settings_OpenFolder.Content" xml:space="preserve"><value>Ordner öffnen</value></data>
+    <data name="Settings_LocationHint.Text" xml:space="preserve"><value>Wählen Sie z. B. einen OneDrive-Ordner, um die Sammlung auf mehreren Geräten zu nutzen. Enthält der Ordner bereits eine Sammlung, wird diese verwendet.</value></data>
+    <data name="Settings_LocationError" xml:space="preserve"><value>Der Speicherort konnte nicht verwendet werden: {0}</value></data>
+    <data name="Settings_About.Text" xml:space="preserve"><value>Info zu dieser App</value></data>
+    <data name="Settings_AboutApp.Header" xml:space="preserve"><value>Euro-Münzsammlung</value></data>
+    <data name="Settings_Version" xml:space="preserve"><value>Version {0}</value></data>
+    <data name="Settings_CreditImages.Text" xml:space="preserve"><value>Münzbilder: © Europäische Zentralbank / Europäische Union</value></data>
+    <data name="Settings_CreditFlags.Text" xml:space="preserve"><value>Länderflaggen: flagcdn.com (gemeinfrei)</value></data>
+    <data name="Settings_CreditData.Text" xml:space="preserve"><value>Datenquelle: Verzeichnis der Euro-Münzen der EZB</value></data>
+    <data name="Settings_License.Text" xml:space="preserve"><value>Quellcode unter MIT-Lizenz</value></data>
+    <data name="Settings_LinkEcb.Content" xml:space="preserve"><value>EZB – Euro-Münzen</value></data>
+    <data name="Settings_LinkSource.Content" xml:space="preserve"><value>Quellcode</value></data>
+    <data name="Settings_Logs.Header" xml:space="preserve"><value>Fehlerprotokolle</value></data>
+    <data name="Settings_OpenLogs.Content" xml:space="preserve"><value>Protokollordner öffnen</value></data>
+</root>

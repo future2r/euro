@@ -1,0 +1,25 @@
+<Project>
+
+    <!-- Shared settings for all projects in the solution. -->
+    <PropertyGroup>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <AnalysisLevel>latest-recommended</AnalysisLevel>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <Deterministic>true</Deterministic>
+        <SatelliteResourceLanguages>de;en</SatelliteResourceLanguages>
+    </PropertyGroup>
+
+    <!-- Product information; the release workflow sets the version from the Git tag (v1.2.3 → 1.2.3). -->
+    <PropertyGroup>
+        <Version>0.1.0</Version>
+        <Product>EuroCoins</Product>
+        <Company>Frank Ulbricht</Company>
+        <Authors>Frank Ulbricht</Authors>
+        <Copyright>© 2026 Frank Ulbricht</Copyright>
+        <NeutralLanguage>en-US</NeutralLanguage>
+    </PropertyGroup>
+
+</Project>

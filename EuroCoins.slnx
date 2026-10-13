@@ -1,0 +1,27 @@
+<Solution>
+    <Folder Name="/src/">
+        <Project Path="src/EuroCoins/EuroCoins.csproj">
+            <Platform Solution="*|x64" Project="x64" />
+            <Platform Solution="*|ARM64" Project="ARM64" />
+        </Project>
+        <Project Path="src/EuroCoins.Core/EuroCoins.Core.csproj" />
+    </Folder>
+    <Folder Name="/tests/">
+        <Project Path="tests/EuroCoins.Tests/EuroCoins.Tests.csproj" />
+    </Folder>
+    <Folder Name="/tools/">
+        <Project Path="tools/EuroCoins.CatalogTool/EuroCoins.CatalogTool.csproj" />
+    </Folder>
+    <Folder Name="/Solution Items/">
+        <File Path=".editorconfig" />
+        <File Path="Directory.Build.props" />
+        <File Path="Directory.Packages.props" />
+        <File Path="global.json" />
+        <File Path="README.md" />
+        <File Path="EuroCoins.code-workspace" />
+    </Folder>
+    <Configurations>
+        <Platform Name="x64" />
+        <Platform Name="ARM64" />
+    </Configurations>
+</Solution>
